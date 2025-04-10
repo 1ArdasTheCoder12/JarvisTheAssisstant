@@ -1,0 +1,38 @@
+
+import  speech_recognition as sr 
+import webbrowser
+import pyttsx3
+engine = pyttsx3.init()
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
+def processCommand(c):
+    if "open google" in c.lower():
+        webbrowser.open("https://google.com")
+    elif "open youtube" in c.lower():
+        webbrowser.open("https://youtube.com")
+    elif "open whatshapp" in c.lower():
+        webbrowser.open("https://web.whatshapp.com")
+
+if __name__ == "__main__":
+    speak("installing jarvis.....")
+    while True:
+        r = sr.Recognizer()
+        print("Recoginizing....")
+        try:
+            with sr.Microphone () as source:
+                print("listining.....")
+                audio = r.listen(source,timeout=5 ,  phrase_time_limit=5)
+            word  = r.recognize_google(audio)                    
+            if ("jarvis" in word.lower()):
+                speak("yes sir")
+                with sr.Microphone () as source:
+                    print("listining.....")
+                    audio = r.listen(source)
+                    command   = r.recognize_google(audio)
+                    processCommand(command)
+                
+        except sr.UnknownValueError as e:
+            print("sorry but mic dont understand")
+        except Exception as e:
+            print("google  error; {0}".format(e))
